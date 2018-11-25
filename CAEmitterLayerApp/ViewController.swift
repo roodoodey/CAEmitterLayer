@@ -24,11 +24,19 @@ class ViewController: UIViewController {
             
         }
         
+        // Button pressed to make the emitter emit the particles
+        let button = UIButton(frame: CGRect(x: view.frame.width * 0.5 - 60, y: view.frame.height * 0.5 - 40, width: 120, height: 80))
+        button.setTitle("Emit!", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.backgroundColor = UIColor.blue
+        button.addTarget(self, action: #selector(addEmitter), for: .touchUpInside)
+        view.addSubview(button)
         
     }
     
-    func addEmitter() {
+    @objc func addEmitter() {
         
+        // IF an emitter already exists remove it.
         if emitter?.superlayer != nil {
             emitter?.removeFromSuperlayer()
         }
@@ -60,7 +68,7 @@ class ViewController: UIViewController {
     
     func getRandomImage() -> UIImage {
         
-        let upperBound = UInt32(particleImages.count + 1)
+        let upperBound = UInt32(particleImages.count)
         let randomIndex = Int(arc4random_uniform( upperBound ))
         
         return particleImages[randomIndex]

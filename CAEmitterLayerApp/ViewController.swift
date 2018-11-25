@@ -16,7 +16,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        view.backgroundColor = UIColor.black
         
+        // Populate the random images array for the particles
         for index in 1..<8 {
             if let image = UIImage(named: "StarParticle00\(index)") {
                 particleImages.append(image)
@@ -29,12 +31,19 @@ class ViewController: UIViewController {
         button.setTitle("Emit!", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = UIColor.blue
-        button.addTarget(self, action: #selector(addEmitter), for: .touchUpInside)
+        button.addTarget(self, action: #selector(changeButton(sender:)), for: .touchDown)
+        button.addTarget(self, action: #selector(addEmitter(sender:)), for: .touchUpInside)
         view.addSubview(button)
         
     }
     
-    @objc func addEmitter() {
+    @objc func changeButton(sender: UIButton) {
+        sender.alpha = 0.5
+    }
+    
+    @objc func addEmitter(sender: UIButton) {
+        
+        sender.alpha = 1.0
         
         // IF an emitter already exists remove it.
         if emitter?.superlayer != nil {
@@ -44,6 +53,8 @@ class ViewController: UIViewController {
         emitter = CAEmitterLayer()
         emitter?.emitterShape = CAEmitterLayerEmitterShape.point
         emitter?.position = CGPoint(x: self.view.frame.width * 0.5, y: self.view.frame.height * 0.5)
+        // So that the emitter starts now, and is not preloaded. 
+        emitter?.beginTime = CACurrentMediaTime()
         
         var cells = [CAEmitterCell]()
         for _ in 0..<40 {
